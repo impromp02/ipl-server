@@ -1,0 +1,19 @@
+{
+  "name": "ipl",
+  "version": "1.0.0",
+  "description": "IPL Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Vivek Singh <vivekonline01@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongoose": "^5.3.16"
+  },
+  "devDependencies": {
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.8"
+  }
+}
