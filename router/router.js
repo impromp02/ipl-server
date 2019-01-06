@@ -18,6 +18,14 @@ mongoose.connection.on('connected', () => console.log('** DB connected ***'))
 mongoose.connection.on('error', () => console.log('** DB error **'));
 const Match = mongoose.model('Match', new mongoose.Schema({}), 'matches');
 
+// Route configuration
+router.use((req, res, next) => {
+  res.set({
+    'Access-Control-Allow-Origin': '*'
+  });
+  next();
+});
+
 // ****** routes ******
 router.get('/season', function(req, res) {
   Promise.all([

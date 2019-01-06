@@ -48,6 +48,19 @@ const matchesPlayed = [
         $sum: "$allMatches.matches"
       }
     }
+  },
+  {
+    $project: {
+      _id: {
+        $toInt: "$_id"
+      },
+      value: "$totalMatches"
+    }
+  },
+  {
+    $sort: {
+      _id: 1
+    }
   }
 ];
 
@@ -57,7 +70,7 @@ const winType = [
   },{
     $group: {
       _id: "$Win_Type", 
-      count: {
+      value: {
         $sum: 1
       }
     }
@@ -80,7 +93,9 @@ const winMargin = [
     }
   }, {
     $project: {
-      season: "$Season_Id", 
+      season: {
+        $toInt: "$Season_Id"
+      }, 
       wonBy: {
         $toInt: "$Won_By"
       }
@@ -95,7 +110,7 @@ const winMargin = [
   }, {
     $project: {
       _id: 1, 
-      margin: {
+      value: {
         $floor: "$avgMargin"
       }
     }
