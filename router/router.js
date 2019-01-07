@@ -6,7 +6,8 @@ const router = express.Router();
  * import queries
  */
 
-const { matchesPlayed, winType, winMargin } = require('../queries/season/seasonQuery');
+const { matchesPlayed, winType, winMargin, matchesWonByTeams } = require('../queries/season/allSeasonQuery');
+const {runsScoredEachMatch, tossDecision, resultOverview} = require('../queries/season/seasonQuery');
 
 // **** establish DB connection ****
 const mongooseOptions = {
@@ -31,23 +32,33 @@ router.get('/season', function(req, res) {
   Promise.all([
     Match.aggregate(matchesPlayed),
     Match.aggregate(winType),
-    Match.aggregate(winMargin)
+    Match.aggregate(winMargin),
+    Match.aggregate(matchesWonByTeams)
   ])
     .then(result => res.json(result))
     .catch(error => res.send(error));
 });
 
 router.get('/season/:seasonId', function(req, res) {
-  console.log(req.params.seasonId);
-  res.send('season Id wala')
+  if(isNaN(req.params.seasonId)) {
+    res.send('No data to this season. Enter a valid Season');
+  }
+
+  Promise.all([
+    Match.aggregate(runsScoredEachMatch(req.params.seasonId)),
+    Match.aggregate(tossDecision(req.params.seasonId)),
+    Match.aggregate(resultOverview(req.params.seasonId))
+  ])
+  .then(result => res.json(result))
+  .catch(error => res.send(error));
 });
 
 router.get('/season/:seasonId/match', function(req, res) {
-  res.send('season me all match details');
+  res.send('Data for a all match');
 });
 
 router.get('/season/:seasonId/match/:matchId', function(req, res) {
-  res.send('season me particular matcah details');
+  res.send('Data for a particular match');
 });
 
 module.exports = router;
