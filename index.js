@@ -7,8 +7,7 @@ const router = require('./router/router');
 const app = express();
 
 app.use(logger('dev'));
-app.use(express.static(path.resolve('public')));
-app.set('views', '/views');
+app.use(express.static('public'));
 
 app.use('/api', router);
 
