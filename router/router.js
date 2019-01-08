@@ -28,7 +28,7 @@ router.use((req, res, next) => {
 });
 
 // ****** routes ******
-router.get('/season', function(req, res, error) {
+router.get('/season', function(req, res, next) {
   Promise.all([
     Match.aggregate(matchesPlayed),
     Match.aggregate(winType),

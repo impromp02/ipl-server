@@ -114,6 +114,10 @@ const winMargin = [
         $floor: "$avgMargin"
       }
     }
+  }, {
+    $sort: {
+      _id: 1
+    }
   }
 ];
 
@@ -123,16 +127,17 @@ const matchesWonByTeams = [
   },{
     $group: {
       _id: "$Match_Winner_Id", 
-      count: {
+      value: {
         $sum: 1
       }
     }
   }, {
-    $project: {
-      _id: {
-        $toInt: "$_id"
-      }, 
-      value: "$count"
+    $match: {
+      "_id": {$ne: "NULL"} 
+    }
+  },{
+    $match: {
+      "_id": {$ne: ""} 
     }
   }
 ];
