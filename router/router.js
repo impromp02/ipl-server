@@ -43,7 +43,7 @@ router.get('/season/:seasonId', function(req, res, next) {
   if(isNaN(req.params.seasonId)) {
     throw new Error('This season is not available.')
   }
-
+  
   Promise.all([
     Match.aggregate(runsScoredEachMatch(req.params.seasonId)),
     Match.aggregate(tossDecision(req.params.seasonId)),

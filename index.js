@@ -11,4 +11,8 @@ app.use(express.static('public'));
 
 app.use('/api', router);
 
+app.get('*', function(req, res) {
+  res.sendFile('index.html');
+});
+
 app.listen(8080, () => console.log('***Server is listening on 8080***'));

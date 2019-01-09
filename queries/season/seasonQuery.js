@@ -2,8 +2,11 @@ const runsScoredEachMatch = (seasonId) => {
   return [
     {
       $match: {
-        Season_Id: "1", 
-        Match_Id: "335987"
+        Season_Id: seasonId, 
+        Match_Id: {
+          $exists: true, 
+          $ne: null
+        }
       }
     }, {
       $project: {
@@ -30,6 +33,24 @@ const runsScoredEachMatch = (seasonId) => {
               }
             }
           }, {
+            $match: {
+              Batsman_Scored: {
+                $ne: null
+              }
+            }
+          }, {
+            $match: {
+              Batsman_Scored: {
+                $ne: " "
+              }
+            }
+          }, {
+            $match: {
+              Batsman_Scored: {
+                $ne: "Do_nothing"
+              }
+            }
+          }, {
             $project: {
               Innings_Id: 1, 
               Batsman_Scored: {
@@ -49,7 +70,7 @@ const runsScoredEachMatch = (seasonId) => {
         as: "score"
       }
     }
-  ]; 
+  ];
 }
 
 const tossDecision = (seasonId) => {
@@ -85,6 +106,10 @@ const resultOverview = (seasonId) => {
                 $sum: 1
               }
             }
+          }, {
+            $match: {
+              $or: [{_id: "by runs"}, {_id: "by wickets"}]
+            }
           }
         ], 
         dw: [
@@ -94,7 +119,7 @@ const resultOverview = (seasonId) => {
             }
           }, {
             $group: {
-              _id: "$Is_DuckWorthLewis", 
+              _id: "dw", 
               count: {
                 $sum: 1
               }
@@ -109,8 +134,40 @@ const resultOverview = (seasonId) => {
                 $sum: 1
               }
             }
+          }, {
+            $match: {
+              $or: [
+                {
+                  _id: "field"
+                }, {
+                  _id: "bat"
+                }, {
+                  _id: "1"
+                }
+              ]
+            }
+          }, {
+            $group: {
+              _id: "superOver", 
+              count: {
+                $sum: "$count"
+              }
+            }
           }
         ]
+      }
+    }, {
+      $project: {
+        resultStats: {$concatArrays: ["$wintype", "$dw", "$superOver"]} 
+      }
+    }, {
+      $unwind: {
+        path: "$resultStats"
+      }
+    }, {
+      $group: {
+        _id: "$resultStats._id",
+        count: {$sum: "$resultStats.count"}
       }
     }
   ];
