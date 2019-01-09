@@ -1,12 +1,12 @@
 const express = require('express');
 const path = require('path');
-const logger = require('morgan');
+//const logger = require('morgan');
 const router = require('./router/router');
 
 // **** express app setup *****
 const app = express();
 
-app.use(logger('dev'));
+//app.use(logger('dev'));
 app.use(express.static('public'));
 
 app.use('/api', router);
