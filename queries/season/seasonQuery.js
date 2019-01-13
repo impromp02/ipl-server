@@ -50,6 +50,12 @@ const runsScoredEachMatch = (seasonId) => {
                 $ne: "Do_nothing"
               }
             }
+          },{
+            $match: {
+              Batsman_Scored: {
+                $ne: ""
+              }
+            }
           }, {
             $project: {
               Innings_Id: 1, 

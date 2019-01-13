@@ -12,6 +12,8 @@ const {runsScoredEachMatch, tossDecision, resultOverview} = require('../queries/
 // **** establish DB connection ****
 const mongooseOptions = {
   useNewUrlParser: true,
+  poolSize: 10,
+  socketTimeoutMS: 30000 * 2
 };
 
 mongoose.connect('mongodb://localhost:27017/ipl', mongooseOptions);
@@ -45,9 +47,9 @@ router.get('/season/:seasonId', function(req, res, next) {
   }
   
   Promise.all([
-    Match.aggregate(runsScoredEachMatch(req.params.seasonId)),
-    Match.aggregate(tossDecision(req.params.seasonId)),
-    Match.aggregate(resultOverview(req.params.seasonId))
+    Match.aggregate(runsScoredEachMatch(req.params.seasonId)).option({maxTimeMS: 30000 * 2}).exec(),
+    Match.aggregate(tossDecision(req.params.seasonId)).option({maxTimeMS: 30000 * 2}).exec(),
+    Match.aggregate(resultOverview(req.params.seasonId)).option({maxTimeMS: 30000 * 2}).exec()
   ])
   .then(result => res.json(result))
   .catch(error => next(error));
