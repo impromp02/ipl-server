@@ -2,7 +2,7 @@ const runsScoredEachMatch = (seasonId) => {
   return [
     {
       $match: {
-        Season_Id: seasonId, 
+        Season_Id: +seasonId, 
         Match_Id: {
           $exists: true, 
           $ne: null
@@ -83,7 +83,7 @@ const tossDecision = (seasonId) => {
   return [
     {
       $match: {
-        Season_Id: seasonId
+        Season_Id: +seasonId
       }
     }, {
       $group: {
@@ -100,7 +100,7 @@ const resultOverview = (seasonId) => {
   return [
     {
       $match: {
-        Season_Id: seasonId
+        Season_Id: +seasonId
       }
     }, {
       $facet: {

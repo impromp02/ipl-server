@@ -16,7 +16,7 @@ const mongooseOptions = {
   socketTimeoutMS: 30000 * 2
 };
 
-mongoose.connect('mongodb://localhost:27017/ipl', mongooseOptions);
+mongoose.connect('mongodb+srv://admin:a12345678@ipl-dash-cjgek.mongodb.net/ipl-dash?retryWrites=true', mongooseOptions);
 mongoose.connection.on('connected', () => console.log('** DB connected ***'))
 mongoose.connection.on('error', () => console.log('** DB error **'));
 const Match = mongoose.model('Match', new mongoose.Schema({}), 'matches');
